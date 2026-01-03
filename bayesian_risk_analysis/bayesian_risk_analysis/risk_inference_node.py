@@ -146,10 +146,6 @@ class RiskInferenceNode(Node):
         elif vib < 0.5: vib_state = 1
         else: vib_state = 2
 
-        # if self.current_roll < 5: roll_state = 0
-        # elif self.current_roll < 15: roll_state = 1
-        # else: roll_state = 2
-
         turn = self.current_turn_rate
         if turn < 0.1: turn_state = 0
         elif turn < 0.3: turn_state = 1
