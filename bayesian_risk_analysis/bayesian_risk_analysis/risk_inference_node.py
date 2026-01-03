@@ -17,6 +17,16 @@ class RiskInferenceNode(Node):
     def __init__(self):
         super().__init__('risk_inference_node')
 
+        self.declare_parameter("timer_period_s", 0.2)
+        self.declare_parameter("vibration_window", 25)
+        self.declare_parameter("meters_per_deg_lat", 111132.0)
+        self.declare_parameter("wind_state", 0)
+        self.declare_parameter("depth_state", 0)
+
+        timer_period = float(self.get_parameter("timer_period_s").value)
+        self.vibration_window = int(self.get_parameter("vibration_window").value)
+        self.meters_per_deg_lat = float(self.get_parameter("meters_per_deg_lat").value)
+
         pkg_share = get_package_share_directory('bayesian_risk_analysis')
         model_path = os.path.join(pkg_share, 'models', 'integrity_network.pkl')
 
@@ -27,7 +37,7 @@ class RiskInferenceNode(Node):
                 self.bn_infer = pickle.load(f)
             self.get_logger().info(f"Model loaded from: {model_path}")
         except Exception as e:
-            self.get_logger().error(f"Failed to load model! {e}")
+            self.get_logger().error(f"Failed to load model from {model_path}: {e}")
 
         self.last_pose_pos = None
         self.last_pose_time = None
